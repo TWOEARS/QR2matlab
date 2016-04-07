@@ -1,0 +1,31 @@
+#ifndef QR2MATLABSTRUCT_IDL
+#define QR2MATLABSTRUCT_IDL
+
+module QR2matlab {
+
+
+    struct timestamp
+    {
+        unsigned long sec;
+        unsigned long usec;
+    };
+
+    struct std_msgs__Header
+    {
+        unsigned long seq;
+        timestamp stamp;
+    };
+
+    struct std_msgs__String {
+        string data;
+    };
+
+    struct std_msgs__Stamped {
+        std_msgs__Header header;
+        std_msgs__String message;
+    };
+
+#pragma masquerade ros std_msgs__String std_msgs/String
+};
+#endif /* QR2MATLABSTRUCT_IDL */
+

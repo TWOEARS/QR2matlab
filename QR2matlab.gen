@@ -1,0 +1,25 @@
+#include "QR2matlabStruct.idl"
+
+component QR2matlab {
+    version         "1.0";
+    lang            "c";
+    email	    "musabini@isir.upmc.fr";
+    require         "genom3 >= 2.99.26";
+
+    port in QR2matlab::std_msgs__String dataIn;
+    port out QR2matlab::std_msgs__Stamped dataOut;
+
+    task publish {
+	period      50ms;
+    };
+
+    activity Publish() {
+        doc         "Get and publish consecutive QR code result.";
+        task        publish;
+        interrupts  Publish; 
+
+        codel <start>   	start( out dataOut ) yield exec;
+        codel <exec>    	exec( in dataIn, out dataOut ) yield pause::exec, stop;
+        codel <stop>    	stop( ) yield ether;
+   };
+};
