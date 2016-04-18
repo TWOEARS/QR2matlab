@@ -9,9 +9,13 @@ component QR2matlab {
     port in QR2matlab::std_msgs__String dataIn;
     port out QR2matlab::std_msgs__Seq_Stamped dataOut;
 
-    task publish{
-	period 100ms;
-	codel <start> 	init( out dataOut ) yield ether;
+    ids {
+	sequence<string>	data;
+    };
+
+    task publish {
+	period 100 ms;
+        codel <start>   	init( inout ::ids, out dataOut ) yield ether;
     };
 
     exception e_noMemory;
@@ -21,9 +25,10 @@ component QR2matlab {
         task        publish;
         interrupts  Publish; 
 
-        codel <start>   	start( local in bufferSize, out dataOut ) yield exec;
-        codel <exec>   		exec( in dataIn, out dataOut ) yield pause::exec, ether;
-        codel <stop>    	stop( out dataOut) yield ether;
+        codel <start>   	start( local in bufferSize, inout ::ids ) yield exec;
+        codel <exec>   		readQR( in dataIn, inout ::ids ) yield pause::exec, publish;
+        codel <publish>   	writeQR( inout ::ids, out dataOut ) yield ether;
+        codel <stop>    	stop( out dataOut ) yield ether;
 
 	throw e_noMemory;
    };

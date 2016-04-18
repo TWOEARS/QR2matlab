@@ -2,7 +2,7 @@ addpath(genpath('~/openrobots/lib/matlab'));
 
 client = genomix.client;
 QR2matlab = client.load('QR2matlab');
-QR2matlab.connect_port('dataIn', '/visp_auto_tracker/code_message' );
+connection = QR2matlab.connect_port('dataIn', '/visp_auto_tracker/code_message');
 
 publish = QR2matlab.Publish('-a',10);
 
