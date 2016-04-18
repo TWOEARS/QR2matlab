@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 struct timeval tv;
-static int32_t ii;
+static volatile int32_t ii;
 /* --- Task publish ----------------------------------------------------- */
 
 
@@ -20,6 +20,8 @@ genom_event
 init(const QR2matlab_dataOut *dataOut, genom_context self)
 {
   dataOut->data(self)->header.seq = 0;
+  dataOut->data(self)->message.data._length = 0;
+
   dataOut->write( self );
 
   return QR2matlab_ether;
@@ -38,10 +40,14 @@ genom_event
 start(int32_t bufferSize, const QR2matlab_dataOut *dataOut,
       genom_context self)
 {
-  dataOut->data(self)->message.data._length = bufferSize;
+  if ( dataOut->data(self)->message.data._length != bufferSize ) {
+	  dataOut->data(self)->message.data._length = bufferSize;
+	  if (genom_sequence_reserve(&(dataOut->data(self)->message.data), bufferSize) )
+	  return QR2matlab_e_noMemory( self );
+  }
 
-  if (genom_sequence_reserve(&(dataOut->data(self)->message.data), bufferSize) )
-  return QR2matlab_e_noMemory( self );
+  for ( int32_t iii = 0 ; iii < bufferSize ; iii++ )
+    dataOut->data( self )->message.data._buffer[ii] = "Not seen any QRcode";
 
   dataOut->write( self );
   ii = 0;
@@ -56,27 +62,29 @@ start(int32_t bufferSize, const QR2matlab_dataOut *dataOut,
  * Throws QR2matlab_e_noMemory.
  */
 genom_event
-exec(int32_t bufferSize, const QR2matlab_dataIn *dataIn,
+exec(const QR2matlab_dataIn *dataIn,
      const QR2matlab_dataOut *dataOut, genom_context self)
 {
   dataIn->read(self);
   if(dataIn->data(self)->data != NULL) {
 		
-	  if ( ii < bufferSize ) {
-	  	dataOut->data( self )->message.data._buffer[ii] = dataIn->data( self )->data ;
+	  if ( ii < dataOut->data(self)->message.data._length ) {
+		if ( !( strcmp(dataIn->data( self )->data, "") ) )
+		  	dataOut->data( self )->message.data._buffer[ii] = dataIn->data( self )->data;
+		else
+		  	dataOut->data( self )->message.data._buffer[ii] = "Not seen any QRcode";
 		ii++;
 		return QR2matlab_pause_exec;
 	  }
- 
+
+ 	  ii = 0;
 	  dataOut->write( self );
+	  gettimeofday(&tv, NULL);
+		 
+	  dataOut->data(self)->header.seq += 1;
+	  dataOut->data(self)->header.stamp.sec = tv.tv_sec;
+	  dataOut->data(self)->header.stamp.usec = tv.tv_usec;
   }
-
-  gettimeofday(&tv, NULL);
-	 
-  dataOut->data(self)->header.seq += 1;
-  dataOut->data(self)->header.stamp.sec = tv.tv_sec;
-  dataOut->data(self)->header.stamp.usec = tv.tv_usec;
-
   return QR2matlab_ether;
 }
 

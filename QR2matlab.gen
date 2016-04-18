@@ -22,7 +22,7 @@ component QR2matlab {
         interrupts  Publish; 
 
         codel <start>   	start( local in bufferSize, out dataOut ) yield exec;
-        codel <exec>   		exec( local in bufferSize, in dataIn, out dataOut ) yield pause::exec, ether;
+        codel <exec>   		exec( in dataIn, out dataOut ) yield pause::exec, ether;
         codel <stop>    	stop( out dataOut) yield ether;
 
 	throw e_noMemory;

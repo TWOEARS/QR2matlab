@@ -5,6 +5,7 @@ libQR2matlab_codels_la_SOURCES+=	QR2matlab_codels.c
 libQR2matlab_codels_la_SOURCES+=	QR2matlab_publish_codels.c
 
 libQR2matlab_codels_la_CPPFLAGS=	$(requires_CFLAGS)
+libQR2matlab_codels_la_CPPFLAGS+=	-std=c99
 libQR2matlab_codels_la_LDFLAGS=	$(requires_LIBS)
 libQR2matlab_codels_la_LDFLAGS+=	-release $(PACKAGE_VERSION)
 
