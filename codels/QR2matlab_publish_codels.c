@@ -7,7 +7,8 @@
 #include <stdio.h>
 
 struct timeval tv;
-static volatile uint32_t ii; 
+static volatile uint32_t ii;
+
 /* --- Task publish ----------------------------------------------------- */
 
 
