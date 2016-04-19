@@ -6,6 +6,16 @@ The visp_auto_tracker package reads the message of the QR code by a web cam and 
 
 The QR2matlab subscribes to that topic and publishes the same message to matlab.
 
+## Dependencies :
+
+ROS (Ingido) : http://wiki.ros.org/indigo/Installation/Ubuntu
+
+Matlab (2015a)
+
+GenoM3 : https://git.openrobots.org/projects/genom3
+
+Matlab-genomix bridge : https://git.openrobots.org/projects/matlab-genomix
+
 ## Install
 
 On the robot's computer :
