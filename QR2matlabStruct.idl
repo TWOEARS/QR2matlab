@@ -1,6 +1,8 @@
 #ifndef QR2MATLABSTRUCT_IDL
 #define QR2MATLABSTRUCT_IDL
 
+#define MAX_STRING_LENGTH 50
+
 module QR2matlab {
 
 
@@ -17,11 +19,11 @@ module QR2matlab {
     };
 
     struct std_msgs__String {
-        string data;
+        string<MAX_STRING_LENGTH> data;
     };
 
     struct std_msgs__Seq_String {
-        sequence<string> data;
+        sequence<string<MAX_STRING_LENGTH> > data;
     };
 
     struct std_msgs__Stamped {

@@ -212,10 +212,6 @@ CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
-CXX = @CXX@
-CXXCPP = @CXXCPP@
-CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
@@ -275,7 +271,6 @@ abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
-ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 ag_autoreconf = @ag_autoreconf@
 am__include = @am__include@
@@ -328,7 +323,7 @@ top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libQR2matlab_codels.la
 libQR2matlab_codels_la_SOURCES = QR2matlab_c_types.h \
 	QR2matlab_codels.c QR2matlab_publish_codels.c
-libQR2matlab_codels_la_CPPFLAGS = $(requires_CFLAGS) -std=c99
+libQR2matlab_codels_la_CPPFLAGS = $(requires_CFLAGS)
 libQR2matlab_codels_la_LDFLAGS = $(requires_LIBS) -release \
 	$(PACKAGE_VERSION)
 

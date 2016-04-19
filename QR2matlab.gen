@@ -9,27 +9,33 @@ component QR2matlab {
     port in QR2matlab::std_msgs__String dataIn;
     port out QR2matlab::std_msgs__Seq_Stamped dataOut;
 
+    exception e_noMemory;
+
     ids {
-	sequence<string>	data;
+	sequence<string<MAX_STRING_LENGTH> >	data;
     };
 
     task publish {
-	period 100 ms;
-        codel <start>   	init( inout ::ids, out dataOut ) yield ether;
+	period      100ms;
+
+        codel <start>   	init( out dataOut ) yield ether;
     };
 
-    exception e_noMemory;
-
-    activity Publish( in long bufferSize=1 : "The number of string to memorize" ) {
-        doc         "Get and publish consecutive QR code result.";
+    activity Publish( in unsigned long bufferSize = 1 : "The number of QR codes to read" ) {
+        doc         "Gets and publishes bufferSize number of QR code result.";
         task        publish;
         interrupts  Publish; 
 
-        codel <start>   	start( local in bufferSize, inout ::ids ) yield exec;
-        codel <exec>   		readQR( in dataIn, inout ::ids ) yield pause::exec, publish;
-        codel <publish>   	writeQR( inout ::ids, out dataOut ) yield ether;
-        codel <stop>    	stop( out dataOut ) yield ether;
+        codel <start>   	start( local in bufferSize, out ::ids ) yield readQR;
+        codel <readQR>    	readQR( inout dataIn, out ::ids ) yield pause::readQR, writeQR;
+        codel <writeQR>    	writeQR( in ::ids, out dataOut ) yield ether;
+        codel <stop>    	stop( out ::ids, out dataOut ) yield ether;
 
 	throw e_noMemory;
    };
+
+    function Stop() {
+        doc         "Stops all";
+        interrupts  Publish;
+    };
 };
