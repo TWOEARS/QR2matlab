@@ -110,6 +110,6 @@ stop(QR2matlab_ids *ids, const QR2matlab_dataOut *dataOut,
 {
   ids->data._release( ids->data._buffer );
   dataOut->data(self)->message.data._release( dataOut->data(self)->message.data._buffer );
-  
+
   return QR2matlab_ether;
 }
