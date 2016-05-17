@@ -1,41 +1,64 @@
 #ifndef QR2MATLABSTRUCT_IDL
 #define QR2MATLABSTRUCT_IDL
 
-#define MAX_STRING_LENGTH 50
+#define MAX_STRING_LENGTH 100
 
 module QR2matlab {
-
 
     struct timestamp
     {
         unsigned long sec;
-        unsigned long usec;
+        unsigned long nsec;
     };
 
     struct std_msgs__Header
     {
         unsigned long seq;
         timestamp stamp;
+        string frame_id;
+    };
+
+    struct geometry_msgs__Point
+    {
+        double x;
+        double y;
+        double z;
+    };
+
+    struct geometry_msgs__Quaternion
+    {
+        double x;
+        double y;
+        double z;
+        double w;
+    };
+
+    struct geometry_msgs__Pose
+    {
+        geometry_msgs__Point position;
+        geometry_msgs__Quaternion orientation;
+    };
+
+    struct geometry_msgs__PoseStamped
+    {
+        std_msgs__Header header;
+        geometry_msgs__Pose pose;
     };
 
     struct std_msgs__String {
         string<MAX_STRING_LENGTH> data;
     };
 
-    struct std_msgs__Seq_String {
-        sequence<string<MAX_STRING_LENGTH> > data;
+    struct QR2matlab_Struct {
+        geometry_msgs__PoseStamped geometry;
+	std_msgs__String message;
     };
 
-    struct std_msgs__Stamped {
-        std_msgs__Header header;
-        std_msgs__String message;
+    struct QR2matlab_Struct_Seq {
+        sequence<QR2matlab_Struct > info;
     };
 
-    struct std_msgs__Seq_Stamped {
-        std_msgs__Header header;
-        std_msgs__Seq_String message;
-    };
-
+#pragma masquerade ros geometry_msgs__PoseStamped geometry_msgs/PoseStamped
 #pragma masquerade ros std_msgs__String std_msgs/String
 };
 #endif /* QR2MATLABSTRUCT_IDL */

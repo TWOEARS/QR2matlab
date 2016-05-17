@@ -6,30 +6,26 @@ component QR2matlab {
     email	    "musabini@isir.upmc.fr";
     require         "genom3 >= 2.99.26";
 
-    port in QR2matlab::std_msgs__String dataIn;
-    port out QR2matlab::std_msgs__Seq_Stamped dataOut;
+    port in QR2matlab::std_msgs__String messageIn;
+    port in QR2matlab::geometry_msgs__PoseStamped poseIn;
 
     exception e_noMemory;
 
-    ids {
-	sequence<string<MAX_STRING_LENGTH> >	data;
-    };
-
     task publish {
-	period      100ms;
 
-        codel <start>   	init( out dataOut ) yield ether;
+	period      100ms;
     };
 
-    activity Publish( in unsigned long bufferSize = 1 : "The number of QR codes to read" ) {
+    activity Publish( in unsigned long bufferSize = 1 : "The number of QR codes to read",
+		      out QR2matlab::QR2matlab_Struct_Seq dataOut
+	) {
         doc         "Gets and publishes bufferSize number of QR code result.";
         task        publish;
         interrupts  Publish; 
 
-        codel <start>   	start( local in bufferSize, out ::ids ) yield readQR;
-        codel <readQR>    	readQR( inout dataIn, out ::ids ) yield pause::readQR, writeQR;
-        codel <writeQR>    	writeQR( in ::ids, out dataOut ) yield ether;
-        codel <stop>    	stop( out ::ids, out dataOut ) yield ether;
+        codel <start>   	start( local in bufferSize, out dataOut ) yield readQR;
+        codel <readQR>    	readQR( in messageIn, in poseIn, out dataOut ) yield pause::readQR, ether;
+        codel <stop>    	stop( out dataOut ) yield ether;
 
 	throw e_noMemory;
    };
