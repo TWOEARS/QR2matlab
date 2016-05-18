@@ -71,3 +71,25 @@ and open the matlab script QR2matlab.m
 Now place a QR code in front of the robot's webcam and in remote matlab the 
 
 QR2matlab.Publish(numberToRead); request will read numberToRead consecituive QR codes.
+
+
+geometry: 
+  header: 
+    seq: 1177
+    stamp: 
+      secs: 1463500806
+      nsecs: 688076675
+    frame_id: /map
+  pose: 
+    position: 
+      x: 0.0862391498507
+      y: 0.00555621400609
+      z: 0.47812043592
+    orientation: 
+      x: 0.0159728032315
+      y: 0.99915687111
+      z: -0.0361875455902
+      w: 0.0109944538213
+message: 
+  data: http://www.irisa.fr/lagadic/visp
+

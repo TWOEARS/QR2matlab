@@ -9,25 +9,24 @@ component QR2matlab {
     port in QR2matlab::std_msgs__String messageIn;
     port in QR2matlab::geometry_msgs__PoseStamped poseIn;
 
-    exception e_noMemory;
+    port out QR2matlab::QR2matlab_Struct dataOut;
 
-    task publish {
+    exception e_noMemory, e_noData;
 
-	period      100ms;
+    task publish{
+
+	period 100ms;
     };
 
-    activity Publish( in unsigned long bufferSize = 1 : "The number of QR codes to read",
-		      out QR2matlab::QR2matlab_Struct_Seq dataOut
-	) {
-        doc         "Gets and publishes bufferSize number of QR code result.";
+    activity Publish( ) {
+        doc         "Gets and publishes QR code message / pose and orientation.";
         task        publish;
         interrupts  Publish; 
 
-        codel <start>   	start( local in bufferSize, out dataOut ) yield readQR;
-        codel <readQR>    	readQR( in messageIn, in poseIn, out dataOut ) yield pause::readQR, ether;
-        codel <stop>    	stop( out dataOut ) yield ether;
+        codel <start>   	start( port in messageIn, port in poseIn, port out dataOut ) yield pause::start;
+        codel <stop>    	stop( ) yield ether;
 
-	throw e_noMemory;
+	throw e_noMemory, e_noData;
    };
 
     function Stop() {

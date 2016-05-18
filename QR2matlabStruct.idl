@@ -1,8 +1,6 @@
 #ifndef QR2MATLABSTRUCT_IDL
 #define QR2MATLABSTRUCT_IDL
 
-#define MAX_STRING_LENGTH 100
-
 module QR2matlab {
 
     struct timestamp
@@ -46,16 +44,12 @@ module QR2matlab {
     };
 
     struct std_msgs__String {
-        string<MAX_STRING_LENGTH> data;
+        string data;
     };
 
     struct QR2matlab_Struct {
         geometry_msgs__PoseStamped geometry;
 	std_msgs__String message;
-    };
-
-    struct QR2matlab_Struct_Seq {
-        sequence<QR2matlab_Struct > info;
     };
 
 #pragma masquerade ros geometry_msgs__PoseStamped geometry_msgs/PoseStamped
