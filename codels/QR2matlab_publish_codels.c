@@ -41,7 +41,6 @@ start(const QR2matlab_messageIn *messageIn,
   dataOut->data( self )->geometry.pose.orientation.z = poseIn->data( self )->pose.orientation.z;
   dataOut->data( self )->geometry.pose.orientation.w = poseIn->data( self )->pose.orientation.w; 
 	  	  	  
-  // strcpy(dataOut->data( self )->message.data, messageIn->data( self )->data);
   dataOut->data( self )->message.data = messageIn->data( self )->data;
   
   dataOut->write( self );

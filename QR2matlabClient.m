@@ -10,8 +10,8 @@ pause(p);
 QR2matlab.connect_port('poseIn', '/visp_auto_tracker/object_position' );
 pause(p);
 
-publish = QR2matlab.Publish('-a');
 
+publish = QR2matlab.Publish('-a');
 
 qrcode = QR2matlab.dataOut(); % repet as many times you want
 
